@@ -5,6 +5,7 @@ from model.AbsUpdateForm import AbsUpdateForm
 import DBAccessor
 from PIL import Image
 from PIL import ImageTk as itk
+from model.TableEnum import Table
 
 
 class ReadingUpdateForm(AbsUpdateForm):
@@ -74,7 +75,7 @@ class ReadingUpdateForm(AbsUpdateForm):
         DBAccessor.update_reading(
             self.old_values[0], (self.VarID.get(), self.RSubCombo.get(), self.REditCombo.get(), self.RTermVar.get())
         )
-        self.mainF.info_fill('Readings')
+        self.mainF.info_fill(Table.Readings)
 
 
 class EditionUpdateForm(AbsUpdateForm):
@@ -167,7 +168,7 @@ class EditionUpdateForm(AbsUpdateForm):
         new_image_name = self.define_image()
         DBAccessor.update_edition(self.old_values[0],
                                   (self.VarID.get(), self.ENameVar.get(), self.ECostVar.get(), new_image_name))
-        self.mainF.info_fill('Editions')
+        self.mainF.info_fill(Table.Editions)
 
 
 class SubscriberUpdateForm(AbsUpdateForm):
@@ -269,7 +270,7 @@ class SubscriberUpdateForm(AbsUpdateForm):
         DBAccessor.update_subscriber(self.old_values[0],
                                      (self.VarID.get(), self.SNameVariable.get(), self.SSureNameVariable.get(),
                                       self.SGenderVariable.get(), new_image_name))
-        self.mainF.info_fill('Sub')
+        self.mainF.info_fill(Table.Subscribers)
         super().go()
 
 

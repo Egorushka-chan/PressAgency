@@ -6,6 +6,7 @@ from PIL import Image
 from PIL import ImageTk as itk
 import shutil
 from model.AbsInsertForm import AbsInsertForm
+from model.TableEnum import Table
 
 
 class ReadingInsertForm(AbsInsertForm):
@@ -78,7 +79,7 @@ class ReadingInsertForm(AbsInsertForm):
     def go(self):
         DBAccessor.insert_reading(
             (self.RIdVariable.get(), self.RSubCombo.get(), self.REditCombo.get(), self.RTermVariable.get()))
-        self.mainF.info_fill('Readings')
+        self.mainF.info_fill(Table.Readings)
 
 
 class EditionInsertForm(AbsInsertForm):
@@ -132,7 +133,7 @@ class EditionInsertForm(AbsInsertForm):
 
     def go(self):
         DBAccessor.insert_edition((self.EIdVariable.get(), self.ENameVariable.get(), self.ECostVariable.get()))
-        self.mainF.info_fill('Editions')
+        self.mainF.info_fill(Table.Editions)
 
 
 class SubscriberInsertForm(AbsInsertForm):
@@ -189,4 +190,4 @@ class SubscriberInsertForm(AbsInsertForm):
         DBAccessor.insert_subscriber((
             self.SIdVariable.get(), self.SNameVariable.get(), self.SSureNameVariable.get(),
             'М' if self.SGenderVariable.get() == 1 else 'Ж'))
-        self.mainF.info_fill('Subscriber')
+        self.mainF.info_fill(Table.Subscribers)

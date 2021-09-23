@@ -10,6 +10,7 @@ import DBAccessor
 import UpdateForms
 import model.AbsUpdateForm
 from model.user import UserRank, User
+from model.TableEnum import Table
 
 
 class LoginForm:
@@ -65,10 +66,10 @@ class mainF:
         self.file_menu = Menu(self.main_menu, tearoff=0)
         if self.currentUser.rank in (UserRank.employee, UserRank.admin):
             self.file_menu.add_command(label='Новая подписка', accelerator="Ctrl+N",
-                                       command=lambda: self.new_item('Reading'))
-            self.main_menu.bind_all("<Control-n>", lambda event: self.new_item('Reading'))
-            self.file_menu.add_command(label='Изменить подписку', command=lambda: self.change_item('Readings'))
-            self.file_menu.add_command(label='Удалить подписку', command=lambda: self.delete_item('Readings'))
+                                       command=lambda: self.new_item(Table.Readings))
+            self.main_menu.bind_all("<Control-n>", lambda event: self.new_item(Table.Readings))
+            self.file_menu.add_command(label='Изменить подписку', command=lambda: self.change_item(Table.Readings))
+            self.file_menu.add_command(label='Удалить подписку', command=lambda: self.delete_item(Table.Readings))
             self.file_menu.add_separator()
         self.file_menu.add_command(label='Фильтрация', accelerator="Ctrl+F", command=self.open_filter)
         self.main_menu.bind_all("<Control-f>", self.open_filter)
@@ -84,17 +85,20 @@ class mainF:
 
         if self.currentUser.rank in (UserRank.employee, UserRank.admin):
             self.sub_menu = Menu(self.main_menu, tearoff=0)
-            self.sub_menu.add_command(label='Новый подписчик', command=lambda: self.new_item('Subscriber'))
+            self.sub_menu.add_command(label='Новый подписчик', command=lambda: self.new_item(Table.Subscribers))
             if self.currentUser.rank is UserRank.admin:
-                self.sub_menu.add_command(label='Изменить подписчика', command=lambda: self.change_item('Subscribers'))
-                self.sub_menu.add_command(label='Удалить подписчика', command=lambda: self.delete_item('Subscribers'))
+                self.sub_menu.add_command(label='Изменить подписчика',
+                                          command=lambda: self.change_item(Table.Subscribers))
+                self.sub_menu.add_command(label='Удалить подписчика',
+                                          command=lambda: self.delete_item(Table.Subscribers))
 
         if self.currentUser.rank in (UserRank.employee, UserRank.admin):
             self.edition_menu = Menu(self.main_menu, tearoff=0)
-            self.edition_menu.add_command(label='Новое издание', command=lambda: self.new_item('Edition'))
+            self.edition_menu.add_command(label='Новое издание', command=lambda: self.new_item(Table.Editions))
             if self.currentUser.rank is UserRank.admin:
-                self.edition_menu.add_command(label='Изменить издание', command=lambda: self.change_item('Editions'))
-                self.edition_menu.add_command(label='Удалить издание', command=lambda: self.delete_item('Editions'))
+                self.edition_menu.add_command(label='Изменить издание',
+                                              command=lambda: self.change_item(Table.Editions))
+                self.edition_menu.add_command(label='Удалить издание', command=lambda: self.delete_item(Table.Editions))
 
         self.help_menu = Menu(self.main_menu, tearoff=0)
         self.help_menu.add_command(label='О программе', accelerator="Ctrl+H")
@@ -196,23 +200,25 @@ class mainF:
         self.cDRSelected = IntVar(self.main_menu, 50)
         self.cDR50 = Label(self.countDataReadings, text='50', fg='blue')
         self.cDR50.pack(side='left')
-        self.cDR50.bind("<Button-1>", lambda e: (self.cDRSelected.set(50), self.info_fill('Readings')))
+        self.cDR50.bind("<Button-1>", lambda e: (self.cDRSelected.set(50), self.info_fill(Table.Readings)))
         self.cDR200 = Label(self.countDataReadings, text='200', fg='blue')
         self.cDR200.pack(side='left')
-        self.cDR200.bind("<Button-1>", lambda e: (self.cDRSelected.set(200), self.info_fill('Readings')))
+        self.cDR200.bind("<Button-1>", lambda e: (self.cDRSelected.set(200), self.info_fill(Table.Readings)))
         self.cDR500 = Label(self.countDataReadings, text='500', fg='blue')
         self.cDR500.pack(side='left')
-        self.cDR500.bind("<Button-1>", lambda e: (self.cDRSelected.set(500), self.info_fill('Readings')))
+        self.cDR500.bind("<Button-1>", lambda e: (self.cDRSelected.set(500), self.info_fill(Table.Readings)))
         Label(self.countDataReadings, padx=10, text='Всего:').pack(side='left')
         row = DBAccessor.select_info(fr0m="Readings", select="SELECT COUNT(ID)")
         self.cDRTotal = Label(self.countDataReadings, fg='red', text=str(row[0][0]))
         self.cDRTotal.pack(side='left')
 
-        Button(self.countDataReadings, text='<', width=3, command=lambda: self.change_paragraph('<', 'Readings')).pack(
+        Button(self.countDataReadings, text='<', width=3,
+               command=lambda: self.change_paragraph('<', Table.Readings)).pack(
             side='left')
         self.cDRCurrent = IntVar(self.main_menu, 0)
         Label(self.countDataReadings, textvariable=self.cDRCurrent).pack(side='left')
-        Button(self.countDataReadings, text='>', width=3, command=lambda: self.change_paragraph('>', 'Readings')).pack(
+        Button(self.countDataReadings, text='>', width=3,
+               command=lambda: self.change_paragraph('>', Table.Readings)).pack(
             side='left')
         self.countDataReadings.grid(column=1, row=6)
         # --
@@ -221,23 +227,25 @@ class mainF:
         self.cDSSelected = IntVar(self.main_menu, 20)
         self.cDS20 = Label(self.countDataSubscribers, text='20', fg='blue')
         self.cDS20.pack(side='left')
-        self.cDS20.bind("<Button-1>", lambda e: (self.cDSSelected.set(20), self.info_fill('Sub')))
+        self.cDS20.bind("<Button-1>", lambda e: (self.cDSSelected.set(20), self.info_fill(Table.Subscribers)))
         self.cDS100 = Label(self.countDataSubscribers, text='100', fg='blue')
         self.cDS100.pack(side='left')
-        self.cDS100.bind("<Button-1>", lambda e: (self.cDSSelected.set(100), self.info_fill('Sub')))
+        self.cDS100.bind("<Button-1>", lambda e: (self.cDSSelected.set(100), self.info_fill(Table.Subscribers)))
         self.cDS200 = Label(self.countDataSubscribers, text='200', fg='blue')
         self.cDS200.pack(side='left')
-        self.cDS200.bind("<Button-1>", lambda e: (self.cDSSelected.set(200), self.info_fill('Sub')))
+        self.cDS200.bind("<Button-1>", lambda e: (self.cDSSelected.set(200), self.info_fill(Table.Subscribers)))
         Label(self.countDataSubscribers, padx=10, text='Всего:').pack(side='left')
         row = DBAccessor.select_info(fr0m="Subscriber", select="SELECT COUNT(ID)")
         self.cDSTotal = Label(self.countDataSubscribers, fg='red', text=str(row[0][0]))
         self.cDSTotal.pack(side='left')
 
-        Button(self.countDataSubscribers, text='<', width=3, command=lambda: self.change_paragraph('<', 'Sub')).pack(
+        Button(self.countDataSubscribers, text='<', width=3,
+               command=lambda: self.change_paragraph('<', Table.Subscribers)).pack(
             side='left')
         self.cDSCurrent = IntVar(self.main_menu, 0)
         Label(self.countDataSubscribers, textvariable=self.cDSCurrent).pack(side='left')
-        Button(self.countDataSubscribers, text='>', width=3, command=lambda: self.change_paragraph('>', 'Sub')).pack(
+        Button(self.countDataSubscribers, text='>', width=3,
+               command=lambda: self.change_paragraph('>', Table.Subscribers)).pack(
             side='left')
         self.countDataSubscribers.grid(column=2, row=3)
         # --
@@ -246,23 +254,25 @@ class mainF:
         self.cDESelected = IntVar(self.main_menu, 20)
         self.cDE20 = Label(self.countDataEditions, text='20', fg='blue')
         self.cDE20.pack(side='left')
-        self.cDE20.bind("<Button-1>", lambda e: (self.cDESelected.set(20), self.info_fill('Editions')))
+        self.cDE20.bind("<Button-1>", lambda e: (self.cDESelected.set(20), self.info_fill(Table.Editions)))
         self.cDE100 = Label(self.countDataEditions, text='100', fg='blue')
         self.cDE100.pack(side='left')
-        self.cDE100.bind("<Button-1>", lambda e: (self.cDESelected.set(100), self.info_fill('Editions')))
+        self.cDE100.bind("<Button-1>", lambda e: (self.cDESelected.set(100), self.info_fill(Table.Editions)))
         self.cDE200 = Label(self.countDataEditions, text='200', fg='blue')
         self.cDE200.pack(side='left')
-        self.cDE200.bind("<Button-1>", lambda e: (self.cDESelected.set(200), self.info_fill('Editions')))
+        self.cDE200.bind("<Button-1>", lambda e: (self.cDESelected.set(200), self.info_fill(Table.Editions)))
         Label(self.countDataEditions, padx=10, text='Всего:').pack(side='left')
         row = DBAccessor.select_info(fr0m="Edition", select="SELECT COUNT(ID)")
         self.cDETotal = Label(self.countDataEditions, fg='red', text=str(row[0][0]))
         self.cDETotal.pack(side='left')
 
-        Button(self.countDataEditions, text='<', width=3, command=lambda: self.change_paragraph('<', 'Edit')).pack(
+        Button(self.countDataEditions, text='<', width=3,
+               command=lambda: self.change_paragraph('<', Table.Editions)).pack(
             side='left')
         self.cDECurrent = IntVar(self.main_menu, 0)
         Label(self.countDataEditions, textvariable=self.cDECurrent).pack(side='left')
-        Button(self.countDataEditions, text='>', width=3, command=lambda: self.change_paragraph('>', 'Edit')).pack(
+        Button(self.countDataEditions, text='>', width=3,
+               command=lambda: self.change_paragraph('>', Table.Editions)).pack(
             side='left')
         self.countDataEditions.grid(column=2, row=6)
 
@@ -274,7 +284,7 @@ class mainF:
         self.main_window.mainloop()
 
     def trev_select(self, place, event=None):
-        if place == 'Sub':
+        if place == Table.Subscribers:
             value = self.tableSubscribers.item(self.tableSubscribers.selection()[0], option='value')
             if value[4] is not None or value[4] != "":
                 image_name = value[4]
@@ -286,7 +296,7 @@ class mainF:
                 self.cnvScrb.delete('all')
                 self.cnvScrb.image = imgScrb
                 self.cnvScrb.create_image(0, 0, anchor=NW, image=imgScrb)
-        elif place == 'Edit':
+        elif place == Table.Editions:
             value = self.tableEditions.item(self.tableEditions.selection()[0], option='value')
             if value[3] is not None or value[3] != "":
                 image_name = value[3]
@@ -300,18 +310,18 @@ class mainF:
                 self.cnvEdt.create_image(0, 0, anchor=NW, image=imgEdt)
 
     def change_item(self, type):
-        if type == 'Readings':
+        if type == Table.Readings:
             value = self.tableReadings.item(self.tableReadings.selection()[0], option='value')
             UpdateForms.ReadingUpdateForm(value, self)
-        elif type == 'Editions':
+        elif type == Table.Editions:
             value = self.tableEditions.item(self.tableEditions.selection()[0], option='value')
             UpdateForms.EditionUpdateForm(value, self)
-        elif type == 'Subscribers':
+        elif type == Table.Subscribers:
             value = self.tableSubscribers.item(self.tableSubscribers.selection()[0], option='value')
             UpdateForms.SubscriberUpdateForm(value, self)
 
     def change_paragraph(self, direction, table):
-        if table == 'Readings':
+        if table == Table.Readings:
             if direction == '<':
                 expected = self.cDRCurrent.get() - self.cDRSelected.get()
                 if expected >= 0:
@@ -322,8 +332,8 @@ class mainF:
                 expected = self.cDRCurrent.get() + self.cDRSelected.get()
                 if expected <= int(self.cDRTotal['text']):
                     self.cDRCurrent.set(expected)
-            self.info_fill('Readings')
-        elif table == 'Sub':
+            self.info_fill(Table.Readings)
+        elif table == Table.Subscribers:
             if direction == '<':
                 expected = self.cDSCurrent.get() - self.cDSSelected.get()
                 if expected >= 0:
@@ -334,8 +344,8 @@ class mainF:
                 expected = self.cDSCurrent.get() + self.cDSSelected.get()
                 if expected <= int(self.cDSTotal['text']):
                     self.cDSCurrent.set(expected)
-            self.info_fill('Sub')
-        elif table == 'Edit':
+            self.info_fill(Table.Subscribers)
+        elif table == Table.Editions:
             if direction == '<':
                 expected = self.cDECurrent.get() - self.cDESelected.get()
                 if expected >= 0:
@@ -346,10 +356,10 @@ class mainF:
                 expected = self.cDECurrent.get() + self.cDESelected.get()
                 if expected <= int(self.cDETotal['text']):
                     self.cDECurrent.set(expected)
-            self.info_fill('Editions')
+            self.info_fill(Table.Editions)
 
-    def info_fill(self, table=None):
-        if table == 'Readings' or table is None:
+    def info_fill(self, table: Table = None):
+        if table == Table.Readings or table is None:
             self.tableReadings.delete(*self.tableReadings.get_children())
             rows = DBAccessor.select_info(fr0m='vReadings',
                                           where=f'WHERE ID between {self.cDRCurrent.get()} AND {self.cDRCurrent.get() + self.cDRSelected.get()}')
@@ -357,7 +367,7 @@ class mainF:
                 self.tableReadings.insert("", 'end', values=row)
             self.cDRTotal['text'] = str(DBAccessor.select_info(fr0m="Readings", select="SELECT COUNT(ID)")[0][0])
 
-        if table == 'Editions' or table is None:
+        if table == Table.Editions or table is None:
             self.tableEditions.delete(*self.tableEditions.get_children())
             rows = DBAccessor.select_info(fr0m='Edition',
                                           where=f'WHERE ID between {self.cDECurrent.get()} AND {self.cDECurrent.get() + self.cDESelected.get()}')
@@ -365,7 +375,7 @@ class mainF:
                 self.tableEditions.insert("", 'end', values=row)
             self.cDETotal['text'] = str(DBAccessor.select_info(fr0m="Edition", select="SELECT COUNT(ID)")[0][0])
 
-        if table == 'Sub' or table is None:
+        if table == Table.Subscribers or table is None:
             self.tableSubscribers.delete(*self.tableSubscribers.get_children())
             rows = DBAccessor.select_info(fr0m='Subscriber',
                                           where=f'WHERE ID between {self.cDSCurrent.get()} AND {self.cDSCurrent.get() + self.cDSSelected.get()}')
@@ -404,37 +414,37 @@ class mainF:
                 self.tableReadings.insert("", "end", values=row)
 
     def new_item(self, type, event=None):
-        if type == 'Reading':
+        if type == Table.Readings:
             InsertForms.ReadingInsertForm(self)
-        if type == 'Subscriber':
+        if type == Table.Subscribers:
             InsertForms.SubscriberInsertForm(self)
-        if type == 'Edition':
+        if type == Table.Editions:
             InsertForms.EditionInsertForm(self)
 
     def delete_item(self, type):
-        if type == 'Readings':
+        if type == Table.Readings:
             value = self.tableReadings.item(self.tableReadings.selection()[0], option='value')
             answer = messagebox.askyesno("УДАЛЕНИЕ", f'ВНИМАНИЕ!!! Вы ТОЧНО зотите УДАЛИТЬ Запись №{value[0]}???',
                                          master=self.main_window)
             if answer:
                 DBAccessor.delete_reading(value[0])
-                self.info_fill('Readings')
-        elif type == 'Editions':
+                self.info_fill(Table.Readings)
+        elif type == Table.Editions:
             value = self.tableEditions.item(self.tableEditions.selection()[0], option='value')
             answer = messagebox.askyesno("УДАЛЕНИЕ",
                                          f'ВНИМАНИЕ!!! Вы ТОЧНО зотите УДАЛИТЬ ЖУРНАЛ №{value[0]} {value[1]}???',
                                          master=self.main_window)
             if answer:
                 DBAccessor.delete_edition(value[0])
-                self.info_fill('Editions')
-        elif type == 'Subscribers':
+                self.info_fill(Table.Editions)
+        elif type == Table.Subscribers:
             value = self.tableSubscribers.item(self.tableSubscribers.selection()[0], option='value')
             answer = messagebox.askyesno("УДАЛЕНИЕ",
                                          f'ВНИМАНИЕ!!! Вы ТОЧНО зотите УДАЛИТЬ ЧЕЛОВЕКА(!!!) {value[1]} {value[2]} под номером №{value[0]}???',
                                          master=self.main_window)
             if answer:
                 DBAccessor.delete_subscriber(value[0])
-                self.info_fill('Sub')
+                self.info_fill(Table.Subscribers)
 
 
 if __name__ == '__main__':
