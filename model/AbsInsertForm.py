@@ -2,7 +2,7 @@ from tkinter import *
 from tkinter import ttk, font, filedialog
 
 
-class InsertForm:
+class AbsInsertForm:
     def __init__(self, main):
         self.mainF = main
         self.root = Tk()

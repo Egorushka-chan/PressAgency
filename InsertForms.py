@@ -5,10 +5,10 @@ import DBAccessor
 from PIL import Image
 from PIL import ImageTk as itk
 import shutil
-from model.AbsInsertForm import InsertForm
+from model.AbsInsertForm import AbsInsertForm
 
 
-class ReadingInsertForm(InsertForm):
+class ReadingInsertForm(AbsInsertForm):
     def __init__(self, main):
         super().__init__(main)
         self.root.title('Добавить Подписку!')
@@ -81,7 +81,7 @@ class ReadingInsertForm(InsertForm):
         self.mainF.info_fill('Readings')
 
 
-class EditionInsertForm(InsertForm):
+class EditionInsertForm(AbsInsertForm):
 
     def __init__(self, main):
         super().__init__(main)
@@ -135,7 +135,7 @@ class EditionInsertForm(InsertForm):
         self.mainF.info_fill('Editions')
 
 
-class SubscriberInsertForm(InsertForm):
+class SubscriberInsertForm(AbsInsertForm):
 
     def __init__(self, main):
         super().__init__(main)
