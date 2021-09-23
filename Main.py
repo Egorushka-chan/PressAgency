@@ -4,9 +4,11 @@ from tkinter import ttk, font, messagebox
 from PIL import Image
 from PIL import ImageTk as itk
 
-import Forms
+import FilterForm
 import InsertForms
 import DBAccessor
+import UpdateForms
+import model.AbsUpdateForm
 from model.user import UserRank, User
 
 
@@ -298,14 +300,15 @@ class mainF:
                 self.cnvEdt.create_image(0, 0, anchor=NW, image=imgEdt)
 
     def change_item(self, type):
-        value = ''
         if type == 'Readings':
             value = self.tableReadings.item(self.tableReadings.selection()[0], option='value')
+            UpdateForms.ReadingUpdateForm(value, self)
         elif type == 'Editions':
             value = self.tableEditions.item(self.tableEditions.selection()[0], option='value')
+            UpdateForms.EditionUpdateForm(value, self)
         elif type == 'Subscribers':
             value = self.tableSubscribers.item(self.tableSubscribers.selection()[0], option='value')
-        Forms.ChangeForm(type, value, self)
+            UpdateForms.SubscriberUpdateForm(value, self)
 
     def change_paragraph(self, direction, table):
         if table == 'Readings':
@@ -383,7 +386,7 @@ class mainF:
             self.treeview_sort_column(tv, col, not reverse))
 
     def open_filter(self, event=None):
-        Forms.FilterForm(self)
+        FilterForm.FilterForm(self)
 
     def begin_filter(self, fr0m, where, type):
         rows = DBAccessor.select_info(fr0m, where)
