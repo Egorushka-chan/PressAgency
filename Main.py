@@ -24,6 +24,10 @@ class LoginForm:
         self.loginEntry.grid(row=0, column=1, pady=10)
         self.passEntry = Entry(self.root)
         self.passEntry.grid(row=1, column=1)
+
+        img = Image.open(DBAccessor.base_path + r"photos/program/pressIcon.png")
+        imgItk = itk.PhotoImage(img, master=self.root)
+        self.root.iconphoto(True, imgItk)
         # rows = DBAccessor.select_info(fr0m='Types')
         # type_values = []
         # for row in rows:
