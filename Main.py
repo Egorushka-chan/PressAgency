@@ -11,6 +11,7 @@ import UpdateForms
 import model.AbsUpdateForm
 from model.user import UserRank, User
 from model.TableEnum import Table
+import AboutForm
 
 
 class LoginForm:
@@ -105,7 +106,7 @@ class mainF:
                 self.edition_menu.add_command(label='Удалить издание', command=lambda: self.delete_item(Table.Editions))
 
         self.help_menu = Menu(self.main_menu, tearoff=0)
-        self.help_menu.add_command(label='О программе', accelerator="Ctrl+H")
+        self.help_menu.add_command(label='О программе', accelerator="Ctrl+H", command=self.about_program)
 
         self.main_menu.add_cascade(label='Файл', menu=self.file_menu)
         if self.currentUser.rank in (UserRank.employee, UserRank.admin):
@@ -449,6 +450,9 @@ class mainF:
             if answer:
                 DBAccessor.delete_subscriber(value[0])
                 self.info_fill(Table.Subscribers)
+
+    def about_program(self):
+        AboutForm.AboutFrom()
 
 
 if __name__ == '__main__':
