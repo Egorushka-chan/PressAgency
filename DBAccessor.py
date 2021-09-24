@@ -1,6 +1,11 @@
 import sqlite3 as sql
+# import os
 
 base_path = r"E:\Работа(ы) по 0101110\PressAgency\\"
+
+
+# base_path = "".join(os.path.abspath("")) + '\\'
+# Thx PyCharm for this
 
 
 def intTryParse(value):
