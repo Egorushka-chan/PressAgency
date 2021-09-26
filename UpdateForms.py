@@ -269,7 +269,7 @@ class SubscriberUpdateForm(AbsUpdateForm):
         new_image_name = self.define_image()
         DBAccessor.update_subscriber(self.old_values[0],
                                      (self.VarID.get(), self.SNameVariable.get(), self.SSureNameVariable.get(),
-                                      self.SGenderVariable.get(), new_image_name))
+                                      'М' if self.SGenderVariable.get() == 1 else 'Ж', new_image_name))
         self.mainF.info_fill(Table.Subscribers)
         super().go()
 
