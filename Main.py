@@ -149,7 +149,7 @@ class mainF:
         for col in tab_sub_columns:
             self.tableSubscribers.heading(col, text=col, command=lambda _col=col: \
                 self.treeview_sort_column(self.tableSubscribers, _col, False))
-        self.tableSubscribers.bind("<<TreeviewSelect>>", lambda x: self.trev_select(place='Sub', event=x))
+        self.tableSubscribers.bind("<<TreeviewSelect>>", lambda x: self.trev_select(place=Table.Subscribers, event=x))
 
         self.tableSubscribers.pack(side='right')
         self.verscrlbar1 = ttk.Scrollbar(self.tableSubscribersFrame, orient="vertical",
@@ -175,7 +175,7 @@ class mainF:
         for col in tab_edit_columns:
             self.tableEditions.heading(col, text=col, command=lambda _col=col: \
                 self.treeview_sort_column(self.tableEditions, _col, False))
-        self.tableEditions.bind("<<TreeviewSelect>>", lambda x: self.trev_select(place='Edit', event=x))
+        self.tableEditions.bind("<<TreeviewSelect>>", lambda x: self.trev_select(Table.Editions, event=x))
 
         self.tableEditions.pack(side='right')
         self.verscrlbar2 = ttk.Scrollbar(self.tableEditionsFrame, orient="vertical", command=self.tableEditions.yview)
