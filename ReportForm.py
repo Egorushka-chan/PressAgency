@@ -10,7 +10,7 @@ import csv
 
 
 class ReportForm:
-    def __init__(self, start, user):
+    def __init__(self, user):
         # TODO: start должен в самом начале выбирать нужный отчет
         self.root = Tk()
         self.root.title('Отчеты')
@@ -66,6 +66,10 @@ class ReportForm:
 
         self.root.mainloop()
 
+
+
+
+
     def report_select(self, trash=1):
         if self.user.rank in (UserRank.employee, UserRank.admin):
             self.changeButton.configure(state='normal')
@@ -74,9 +78,10 @@ class ReportForm:
 
         selected_value = self.reportsBox.selection_get()
         id = selected_value.split(' ')[0]
-        raw_query = DBAccessor.select_info(select='Select Reports.Query', fr0m='Reports', where=f'WHERE ID = {id}')
+        required_report = [report for report in self.reports if str(report[0]) == id]
+        raw_query = required_report[0][2]
 
-        processed_query = DBAccessor.select_info(raw_query=raw_query[0][0], keys=True)
+        processed_query = DBAccessor.select_info(raw_query=raw_query, keys=True)
 
         self.data = processed_query[0]
         self.data_columns_names = processed_query[1]
