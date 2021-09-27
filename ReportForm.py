@@ -3,6 +3,7 @@ from tkinter import ttk
 
 import DBAccessor
 from model.user import UserRank
+import openpyxl as xl
 
 import datetime
 import docx
