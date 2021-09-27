@@ -5,10 +5,11 @@ import DBAccessor
 from PIL import Image
 from PIL import ImageTk as itk
 import shutil
-from model.AbsInsertForm import InsertForm
+from model.AbsInsertForm import AbsInsertForm
+from model.TableEnum import Table
 
 
-class ReadingInsertForm(InsertForm):
+class ReadingInsertForm(AbsInsertForm):
     def __init__(self, main):
         super().__init__(main)
         self.root.title('Добавить Подписку!')
@@ -78,10 +79,10 @@ class ReadingInsertForm(InsertForm):
     def go(self):
         DBAccessor.insert_reading(
             (self.RIdVariable.get(), self.RSubCombo.get(), self.REditCombo.get(), self.RTermVariable.get()))
-        self.mainF.info_fill('Readings')
+        self.mainF.info_fill(Table.Readings)
 
 
-class EditionInsertForm(InsertForm):
+class EditionInsertForm(AbsInsertForm):
 
     def __init__(self, main):
         super().__init__(main)
@@ -132,10 +133,10 @@ class EditionInsertForm(InsertForm):
 
     def go(self):
         DBAccessor.insert_edition((self.EIdVariable.get(), self.ENameVariable.get(), self.ECostVariable.get()))
-        self.mainF.info_fill('Editions')
+        self.mainF.info_fill(Table.Editions)
 
 
-class SubscriberInsertForm(InsertForm):
+class SubscriberInsertForm(AbsInsertForm):
 
     def __init__(self, main):
         super().__init__(main)
@@ -189,4 +190,4 @@ class SubscriberInsertForm(InsertForm):
         DBAccessor.insert_subscriber((
             self.SIdVariable.get(), self.SNameVariable.get(), self.SSureNameVariable.get(),
             'М' if self.SGenderVariable.get() == 1 else 'Ж'))
-        self.mainF.info_fill('Subscriber')
+        self.mainF.info_fill(Table.Subscribers)

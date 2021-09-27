@@ -1,6 +1,12 @@
 import sqlite3 as sql
 
+# import os
+
 base_path = r"E:\Работа(ы) по 0101110\PressAgency\\"
+
+
+# base_path = "".join(os.path.abspath("")) + '\\'
+# Thx PyCharm for this
 
 
 def intTryParse(value):
@@ -17,18 +23,24 @@ except:
 cur = conn.cursor()
 
 
-def select_info(fr0m: str, where: str = None, order: str = None, select: str = None):
-    if select is None:
-        command = "Select * FROM " + fr0m
+def select_info(fr0m: str = None, where: str = None, order: str = None, select: str = None, raw_query : str = None, keys=False):
+    if raw_query:
+        command = raw_query
     else:
-        command = select + " FROM " + fr0m
+        if select is None:
+            command = "Select * FROM " + fr0m
+        else:
+            command = select + " FROM " + fr0m
 
-    if where is not None:
-        command = command + " " + where
-    if order is not None:
-        command = command + " " + order
+        if where is not None:
+            command = command + " " + where
+        if order is not None:
+            command = command + " " + order
     cur.execute(command)
     rows = cur.fetchall()
+    if keys:
+        keys = [description[0] for description in cur.description]
+        return rows, keys
     return rows
 
 

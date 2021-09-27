@@ -2,7 +2,7 @@ import enum
 
 
 class User:
-    def __init__(self, login: int, rank):
+    def __init__(self, login, rank):
         self.login = login
         self.rank = rank
 
