@@ -30,18 +30,19 @@ class LoginForm:
         img = Image.open(DBAccessor.base_path + r"photos/program/pressIcon.png")
         imgItk = itk.PhotoImage(img, master=self.root)
         self.root.iconphoto(True, imgItk)
-        # rows = DBAccessor.select_info(fr0m='Types')
-        # type_values = []
-        # for row in rows:
-        #     type_values.insert(len(type_values), row[1])
-        # self.typeVar = StringVar(self.root)
-        # ttk.Combobox(self.root, textvariable=self.typeVar, values=type_values).grid(column=2, rowspan=2, row=0)
+        rows = DBAccessor.select_info(fr0m='Types')
+        type_values = []
+        for row in rows:
+            type_values.insert(len(type_values), row[1])
+        self.typeVar = StringVar(self.root)
+        ttk.Combobox(self.root, textvariable=self.typeVar, values=type_values).grid(column=2, rowspan=2, row=0)
         Button(self.root, text='Подтвердить', command=self.validate).grid(row=3, columnspan=3)
         self.root.mainloop()
 
     def validate(self):
         rows_V = DBAccessor.select_info(fr0m='Users JOIN Types ON Users.Type=Types.ID',
-                                        where=f'WHERE Users.Login = "{self.loginEntry.get()}" AND Users.Password = "{self.passEntry.get()}"')
+                                        where=f'WHERE Users.Login = "{self.loginEntry.get()}" AND Users.Password = "{self.passEntry.get()}"'
+                                              f'AND Types.Name = "{self.typeVar.get()}"')
 
         if len(rows_V) == 1:
             role = UserRank.employee
