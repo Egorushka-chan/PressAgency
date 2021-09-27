@@ -13,16 +13,16 @@ class ReadingUpdateForm(AbsUpdateForm):
         super().__init__(old_values, main)
         Label(self.root, text='Подписчик', font=self.funny_font).grid(row=2, column=0)
         Label(self.root, text=str(self.old_values[1]), font=self.funny_font).grid(row=2, column=1)
-        read_subs = DBAccessor.select_info(select='SELECT d.ID, d.Name, d.Surname',
-                                           fr0m='Subscriber d JOIN Readings ON d.ID = Readings.ID_Subscriber')
+        read_subs = DBAccessor.select_info(fr0m='Subscriber d JOIN Readings ON d.ID = Readings.ID_Subscriber',
+                                           select='SELECT d.ID, d.Name, d.Surname')
         self.RSubCombo = ttk.Combobox(self.root, values=read_subs)
         self.RSubCombo.bind('<<ComboboxSelected>>', lambda e: self.combo_change('Sub'))
         self.RSubCombo.grid(row=2, column=2)
 
         Label(self.root, text='Издание', font=self.funny_font).grid(row=3, column=0)
         Label(self.root, text=str(old_values[2]), font=self.funny_font).grid(row=3, column=1)
-        read_edits = DBAccessor.select_info(select='SELECT d.ID, d.Name, d.Cost',
-                                            fr0m='Edition d JOIN Readings ON d.ID = Readings.ID_Edition')
+        read_edits = DBAccessor.select_info(fr0m='Edition d JOIN Readings ON d.ID = Readings.ID_Edition',
+                                            select='SELECT d.ID, d.Name, d.Cost')
         self.REditCombo = ttk.Combobox(self.root, values=read_edits)
         self.REditCombo.bind('<<ComboboxSelected>>', lambda e: self.combo_change('Edit'))
         self.REditCombo.grid(row=3, column=2)

@@ -7,6 +7,7 @@ from PIL import ImageTk as itk
 import FilterForm
 import InsertForms
 import DBAccessor
+import ReportForm
 import UpdateForms
 import model.AbsUpdateForm
 from model.user import UserRank, User
@@ -80,9 +81,9 @@ class mainF:
         self.main_menu.bind_all("<Control-f>", self.open_filter)
         self.file_menu.add_separator()
         self.report_file_menu = Menu(self.file_menu, tearoff=0)
-        self.report_file_menu.add_command(label='Подписчики по изданиям')
-        self.report_file_menu.add_command(label='Реестр подписчиков')
-        self.report_file_menu.add_command(label='Рейтинг изданий')
+        self.report_file_menu.add_command(label='Подписчики по изданиям', command = lambda : self.open_report(1))
+        self.report_file_menu.add_command(label='Реестр подписчиков', command = lambda : self.open_report(2))
+        self.report_file_menu.add_command(label='Рейтинг изданий', command = lambda : self.open_report(3))
         self.file_menu.add_cascade(label='Отчеты', menu=self.report_file_menu)
         self.file_menu.add_separator()
         self.file_menu.add_command(label='Выход', accelerator="Ctrl+Q", command=quit)
@@ -453,6 +454,9 @@ class mainF:
 
     def about_program(self):
         AboutForm.AboutFrom()
+
+    def open_report(self, id):
+        ReportForm.ReportForm(id, self.currentUser)
 
 
 if __name__ == '__main__':
