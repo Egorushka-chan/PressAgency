@@ -12,6 +12,7 @@ import UpdateForms
 from model.user import UserRank, User
 from model.TableEnum import Table
 import AboutForm
+import ShowcaseForm
 
 
 class LoginForm:
@@ -85,7 +86,7 @@ class mainF:
         # self.report_file_menu.add_command(label='Реестр подписчиков', command = lambda : self.open_report(2))
         # self.report_file_menu.add_command(label='Рейтинг изданий', command = lambda : self.open_report(3))
         # self.file_menu.add_cascade(label='Отчеты', menu=self.report_file_menu)
-        self.file_menu.add_cascade(label='Отчеты', command = lambda : self.open_report())
+        self.file_menu.add_command(label='Отчеты', command = lambda : self.open_report())
         self.file_menu.add_separator()
         self.file_menu.add_command(label='Выход', accelerator="Ctrl+Q", command=quit)
         self.main_window.bind_all("<Control-q>", quit)
@@ -107,6 +108,7 @@ class mainF:
                                               command=lambda: self.change_item(Table.Editions))
                 self.edition_menu.add_command(label='Удалить издание', command=lambda: self.delete_item(Table.Editions))
 
+
         self.help_menu = Menu(self.main_menu, tearoff=0)
         self.help_menu.add_command(label='О программе', accelerator="Ctrl+H", command=self.about_program)
 
@@ -114,7 +116,9 @@ class mainF:
         if self.currentUser.rank in (UserRank.employee, UserRank.admin):
             self.main_menu.add_cascade(label='Подписчики', menu=self.sub_menu)
             self.main_menu.add_cascade(label='Издания', menu=self.edition_menu)
+        self.main_menu.add_command(label='Витрина', command =lambda: self.show_showcase())
         self.main_menu.add_cascade(label='Справка', menu=self.help_menu)
+
 
         self.century_gothic = font.Font(family="Century Gothic", size=11)
         Label(self.main_window, text='Подписки', font=self.century_gothic).grid(column=1, row=1)
@@ -458,6 +462,9 @@ class mainF:
 
     def open_report(self):
         ReportForm.ReportForm(self.currentUser)
+
+    def show_showcase(self):
+        ShowcaseForm.Showcase()
 
 
 if __name__ == '__main__':
