@@ -9,10 +9,10 @@ import datetime
 import docx
 import csv
 
+# https://habr.com/ru/company/skillfactory/blog/553224/
 
 class ReportForm:
     def __init__(self, user):
-        # TODO: start должен в самом начале выбирать нужный отчет
         self.root = Tk()
         self.root.title('Отчеты')
         self.user = user
@@ -98,7 +98,7 @@ class ReportForm:
             self.tableQuery.heading(col, text=col, command=lambda _col=col: \
                 self.treeview_sort_column(self.tableQuery, _col, False))
         for i, column_name in enumerate(self.data_columns_names):
-            self.tableQuery.column(str(i + 1), width=90, anchor='c')
+            self.tableQuery.column(str(i + 1), anchor='c')
             self.tableQuery.heading(str(i + 1), text=column_name)
 
         for row in self.data:
@@ -112,7 +112,7 @@ class ReportForm:
         # values = self.tableQuery.item(*self.tableQuery.get_children(), option='values')
         document = docx.Document()
 
-        document.add_heading('Report', 0)
+        document.add_paragraph('Report (Отчет по русски)')
 
         table = document.add_table(rows=1, cols=0)
         for i, column in enumerate(self.data_columns_names):
@@ -127,7 +127,7 @@ class ReportForm:
 
         document.save(
             DBAccessor.base_path + f'reports/{self.reportsBox.selection_get()}_{datetime.datetime.now().date()}.docx')
-        # TODO: эта фигня что показывает? возможно только на моем последнем ворде все неправильно. Проверить
+        # TODO: таблица так не работает. Сделать через Template
 
     def csv_output(self):
         file_name = DBAccessor.base_path + f'reports/{self.reportsBox.selection_get()}_{datetime.datetime.now().date()}.csv'
@@ -141,8 +141,13 @@ class ReportForm:
                 writer.writerow(row)
 
     def excel_output(self):
-        pass
-        # TODO: вывод в эксель, понты нереальные
+        workbook = xl.Workbook()
+        sheet = workbook.active
+        sheet.append(self.data_columns_names)
+        sheet.title = "Результат"
+        for row in self.data:
+            sheet.append(row)
+        workbook.save(DBAccessor.base_path + f'reports/{self.reportsBox.selection_get()}_{datetime.datetime.now().date()}.xlsx')
 
     def treeview_sort_column(self, tv, col, reverse):
         l = [(tv.set(k, col), k) for k in tv.get_children('')]

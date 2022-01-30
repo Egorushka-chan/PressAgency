@@ -80,6 +80,7 @@ class ReadingInsertForm(AbsInsertForm):
         DBAccessor.insert_reading(
             (self.RIdVariable.get(), self.RSubCombo.get(), self.REditCombo.get(), self.RTermVariable.get()))
         self.mainF.info_fill(Table.Readings)
+        self.RIdVariable.set(self.RIdVariable.get() + 1)
 
 
 class EditionInsertForm(AbsInsertForm):
@@ -94,14 +95,14 @@ class EditionInsertForm(AbsInsertForm):
         Entry(self.root, textvariable=self.EIdVariable, font=self.funny_font).grid(row=0, column=1)
         self.EIdVariable.trace('w', self.scan_enability)
 
-        Label(self.root, text='Название').grid(row=1, column=0)
+        Label(self.root, text='Название').grid(row=2, column=0)
         self.ENameVariable = StringVar(self.root)
-        Entry(self.root, textvariable=self.ENameVariable).grid(row=1, column=1)
+        Entry(self.root, textvariable=self.ENameVariable).grid(row=2, column=1)
         self.ENameVariable.trace('w', self.scan_enability)
 
-        Label(self.root, text='Цена').grid(row=1, column=0)
+        Label(self.root, text='Цена').grid(row=3, column=0)
         self.ECostVariable = StringVar(self.root, 100)
-        Entry(self.root, textvariable=self.ENameVariable).grid(row=1, column=1)
+        Entry(self.root, textvariable=self.ENameVariable).grid(row=3, column=1)
         self.ECostVariable.trace('w', self.scan_enability)
         self.root.mainloop()
 
@@ -134,6 +135,7 @@ class EditionInsertForm(AbsInsertForm):
     def go(self):
         DBAccessor.insert_edition((self.EIdVariable.get(), self.ENameVariable.get(), self.ECostVariable.get()))
         self.mainF.info_fill(Table.Editions)
+        self.EIdVariable.set(self.EIdVariable.get() + 1)
 
 
 class SubscriberInsertForm(AbsInsertForm):
@@ -191,3 +193,4 @@ class SubscriberInsertForm(AbsInsertForm):
             self.SIdVariable.get(), self.SNameVariable.get(), self.SSureNameVariable.get(),
             'М' if self.SGenderVariable.get() == 1 else 'Ж'))
         self.mainF.info_fill(Table.Subscribers)
+        self.SIdVariable.set(self.SIdVariable.get() + 1)
